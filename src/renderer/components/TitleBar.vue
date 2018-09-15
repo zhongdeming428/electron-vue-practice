@@ -12,7 +12,7 @@
 		name: 'title-bar',
 		data() {
 			return {
-				curWin: remote.BrowserWindow.getFocusedWindow()
+				curWin: remote.getCurrentWindow()
 			};
 		},
 		methods: {

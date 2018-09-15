@@ -6,7 +6,7 @@
   /* border-radius: 4px; */
   overflow: hidden;
   height: 100%;
-  -webkit-app-region: no-drag
+  -webkit-app-region: no-drag;
 }
 .layout-header-bar {
   background: #fff;
@@ -23,11 +23,11 @@
   margin: 15px auto;
 }
 .layout-content {
-  margin-top: -0.5px
+  margin-top: -0.5px;
 }
 .menu-icon {
   transition: all 0.3s;
-  -webkit-app-region: no-drag
+  -webkit-app-region: no-drag;
 }
 .rotate-icon {
   transform: rotate(-90deg);
@@ -76,8 +76,9 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  color: white;
   transform: translate(-50%, -50%);
-  background-color: lightblue;
+  background-color: #515a6e;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -107,9 +108,10 @@
                         <span>我的</span>
                     </MenuItem>
                 </Menu>
-                <div class="user-info">
+                <div class="user-info" @click="showLogin">
                   <div>
-                    <span>{{this.isLogin ? "" : "未登录"}}</span>
+                    <Avatar v-if="user.avatarUrl !== ''" :src="user.avatarUrl"/>
+                    <span v-if="user.nickname === ''">未登录</span>
                   </div>
                 </div>
             </Sider>
@@ -122,12 +124,38 @@
                     Content
                 </Content>
             </Layout>
+            <Modal v-model="showLoginDialog" width="320">
+              <p slot="header" style="color:#515a6e;text-align:center">
+                  <Icon type="md-finger-print"></Icon>
+                  <span>登录网易云音乐</span>
+              </p>
+              <div style="text-align:center">
+                  <label>账户：</label><Input v-model="account" placeholder="邮箱/电话" clearable style="width: 200px" /><br><br>
+                  <label>密码：</label><Input v-model="password" placeholder="密码" clearable type="password" style="width: 200px" />
+              </div>
+              <div slot="footer">
+                  <Button type="primary" size="default" long :loading="modal_loading" @click="login">登 录</Button>
+              </div>
+            </Modal>
         </Layout>
     </div>
 </template>
 <script>
-import { MenuItem, Content, Layout, Header, Sider, Icon, Menu } from "iview";
-import titleBar from './TitleBar';
+import {
+  MenuItem,
+  Content,
+  Layout,
+  Header,
+  Modal,
+  Button,
+  Sider,
+  Icon,
+  Menu,
+  Input,
+  Avatar
+} from "iview";
+import titleBar from "./TitleBar";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   components: {
     titleBar,
@@ -137,15 +165,32 @@ export default {
     Header,
     Sider,
     Icon,
-    Menu
+    Menu,
+    Modal,
+    Input,
+    Button,
+    Avatar
   },
   data() {
     return {
       isCollapsed: true,
-      isLogin: false
+      showLoginDialog: false,
+      modal_loading: false,
+      account: '',
+      password: ''
     };
   },
+  created() {
+    if (window.localStorage['isLogin']) {
+      this.USER_UPDATE({
+        isLogin: true,
+        nickname: window.localStorage['nickname'],
+        avatarUrl: window.localStorage['avatarUrl']
+      });
+    }
+  },
   computed: {
+    ...mapGetters(["user"]),
     rotateIcon() {
       return ["menu-icon", this.isCollapsed ? "rotate-icon" : ""];
     },
@@ -154,8 +199,54 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['USER_UPDATE']),
     collapsedSider() {
       this.$refs.side1.toggleCollapse();
+    },
+    showLogin() {
+      if (!this.user.isLogin) {
+        this.showLoginDialog = true;
+      }
+    },
+    login() {
+      // 要先判断登录方式是电话还是邮箱，然后根据情况选择不同的端口。
+      let account = this.account,
+        password = this.password;
+      if (account === '' && password === '') {
+        // 必须输入账户密码
+        this.$Message.error('请输入账户和密码！');
+        return;
+      }
+      if (/\d+/g.test(account) && account.length === 11) {
+        // 电话登录
+        let url = `http://localhost:3000/login/cellphone?phone=${account}&password=${password}`;
+        this.$http.get(url).then(data => {
+          if (data.body.code === 200) {
+            this.$Message.success('登录成功！');
+            // VUEX 记录用户数据 data.body.profile
+            this.USER_UPDATE(Object.assign(data.body.profile, {
+              isLogin: true
+            }));
+            this.showLoginDialog = false;
+            // 本地存储
+            window.localStorage['isLogin'] = true;
+            window.localStorage['nickname'] = data.body.profile.nickname;
+            window.localStorage['avatarUrl'] = data.body.profile.avatarUrl;
+          } else {
+            this.$Message.warning(data.body.msg);
+          }
+        }, err => {
+          console.log(err);
+        });
+      }
+      else if (/@/g.test(account)) {
+        // 邮箱登录
+        alert('邮箱登录！');
+      }
+      else {
+        // 账号非法
+        alert('账户不合法！');
+      }
     }
   }
 };
