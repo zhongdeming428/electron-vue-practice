@@ -128,8 +128,9 @@
                     <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0', cursor: 'pointer'}" type="md-menu" size="24"></Icon>
                     <title-bar style="float:right"></title-bar>
                 </Header>
-                <Content class="layout-content" :style="{background: '#fff', minHeight: '260px'}">
+                <Content class="layout-content" :style="{background: '#fff', minHeight: '260px',position: 'relative'}">
                     <router-view></router-view>
+                    <player style="position:absolute;top:100%;transform:translateY(-100%)"/>
                 </Content>
             </Layout>
             <Modal v-model="showLoginDialog" width="320">
@@ -163,6 +164,7 @@ import {
   Avatar
 } from "iview";
 import titleBar from "./TitleBar";
+import player from './Player';
 import { mapGetters, mapMutations } from "vuex";
 export default {
   components: {
@@ -177,7 +179,8 @@ export default {
     Modal,
     Input,
     Button,
-    Avatar
+    Avatar,
+    player
   },
   data() {
     return {
