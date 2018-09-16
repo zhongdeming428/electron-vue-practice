@@ -91,22 +91,30 @@
         <Layout style="height:100%">
             <Sider ref="side1" class="left-sider" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed">
                 <Menu active-name="1-1" theme="light" width="auto" :class="menuitemClasses">
-                    <MenuItem name="1-1">
+                    <router-link to="/">
+                      <MenuItem name="1-1">
                         <Icon type="ios-navigate"></Icon>
                         <span>发现音乐</span>
-                    </MenuItem>
-                    <MenuItem name="1-2">
+                      </MenuItem>
+                    </router-link>
+                    <router-link to="/search">
+                      <MenuItem name="1-2">
                         <Icon type="ios-search"></Icon>
                         <span>搜索</span>
-                    </MenuItem>
-                    <MenuItem name="1-3">
+                      </MenuItem>
+                    </router-link>
+                    <router-link to="/MV">
+                      <MenuItem name="1-3">
                         <Icon type="logo-youtube"></Icon>
                         <span>MV</span>
-                    </MenuItem>
-                    <MenuItem name="1-4">
+                      </MenuItem>
+                    </router-link>
+                    <router-link to="/mine">
+                      <MenuItem name="1-4">
                         <Icon type="md-person"></Icon>
                         <span>我的</span>
-                    </MenuItem>
+                      </MenuItem>
+                    </router-link>
                 </Menu>
                 <div class="user-info" @click="showLogin">
                   <div>
@@ -121,7 +129,7 @@
                     <title-bar style="float:right"></title-bar>
                 </Header>
                 <Content class="layout-content" :style="{background: '#fff', minHeight: '260px'}">
-                    Content
+                    <router-view></router-view>
                 </Content>
             </Layout>
             <Modal v-model="showLoginDialog" width="320">
