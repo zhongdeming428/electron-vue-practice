@@ -45,10 +45,7 @@ export default {
     flex-direction: row;
     flex: 1;
     justify-content: space-between;
-    padding: 1rem 2rem;
-  }
-  .cursor-pointer {
-    cursor: pointer;
+    padding: 1rem 6rem 1rem 1rem;
   }
   .player-btns-1,
   .player-btns-2,

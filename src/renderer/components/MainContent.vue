@@ -6,13 +6,17 @@
   /* border-radius: 4px; */
   overflow: hidden;
   height: 100%;
-  -webkit-app-region: no-drag;
+  -webkit-app-region: no-drag
 }
 .layout-header-bar {
   background: #fff;
-  border-bottom: 1px solid #dcdee2;
+  border-bottom: 0.5px solid #dcdee2;
   line-height: normal;
   -webkit-app-region: drag;
+  position: fixed;
+  top: 0;
+  z-index: 99999;
+  width: 100%
   /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1); */
 }
 .layout-logo-left {
@@ -23,7 +27,7 @@
   margin: 15px auto;
 }
 .layout-content {
-  margin-top: -0.5px;
+  margin-top: 4rem;
 }
 .menu-icon {
   transition: all 0.3s;
@@ -128,9 +132,9 @@
                     <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0', cursor: 'pointer'}" type="md-menu" size="24"></Icon>
                     <title-bar style="float:right"></title-bar>
                 </Header>
-                <Content class="layout-content" :style="{background: '#fff', minHeight: '260px',position: 'relative'}">
+                <Content class="layout-content" :style="{background: '#fff', width: '100%',position: 'relative'}">
                     <router-view></router-view>
-                    <player style="position:absolute;top:100%;transform:translateY(-100%)"/>
+                    <player style="position:fixed;bottom:0"/>
                 </Content>
             </Layout>
             <Modal v-model="showLoginDialog" width="320">

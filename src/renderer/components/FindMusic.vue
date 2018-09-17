@@ -2,13 +2,13 @@
   <div class="container">
     <p>我的音乐</p>
     <Menu mode="horizontal" theme="light" active-name="1">
-        <MenuItem name="1" to="/personlize">
+        <MenuItem name="1" to="/findMusic/personlize">
             个性推荐
         </MenuItem>
-        <MenuItem name="2" to="/list">
+        <MenuItem name="2" to="/findMusic/list">
             歌单
         </MenuItem>
-        <MenuItem name="3" to="/singer">
+        <MenuItem name="3" to="/findMusic/singer">
             歌手
         </MenuItem>
     </Menu>

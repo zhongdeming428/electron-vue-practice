@@ -8,6 +8,26 @@ a {
     color: #515a6e !important
 }
 .container {
-		padding: 1rem;
-		box-sizing: border-box
+    padding: 1rem;
+    box-sizing: border-box
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.right-border {
+    border-right: 0.5px solid #c3c3c3
+}
+.second-title {
+    margin-top: 5rem;
+    width: 100%;
+    border-bottom: 0.5px solid #c3c3c3;
+    display: block;
+    font-size: 1.2rem
+}
+.song-list {
+    width: 9rem;
+    height: 9rem;
+    border: 1px solid #515a6e;
+    float: left;
+    margin-bottom: 3rem;
 }
