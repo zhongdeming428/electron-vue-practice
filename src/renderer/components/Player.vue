@@ -27,10 +27,34 @@
 
 <script>
 import { Icon } from 'iview';
+import { mapGetters } from 'vuex';
+const eventEmitter = require('../util/event');
+
 export default {
   name: 'player',
   components: {
     Icon
+  },
+  data() {
+    return {
+      currentPlaySongId: ''
+    }
+  },
+  computed: {
+    ...mapGetters(['currentPlayList'])
+  },
+  mounted() {
+    // ...
+    let that = this;
+    eventEmitter.on('startPlay', function() {
+      that.play();
+    })
+  },
+  methods: {
+    play() {
+      // get the song according to song id
+      console.log(this.currentPlayList[0]);
+    }
   }
 }
 </script>

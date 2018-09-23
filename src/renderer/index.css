@@ -31,3 +31,17 @@ a {
     float: left;
     margin-bottom: 3rem;
 }
+.song-list-detail {
+    display: block;
+    padding: 1.5rem 0;
+}
+.song-list-detail > li {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+}
+.song-list-detail > li:hover {
+    background-color: #515a6e !important;
+    color: white
+}

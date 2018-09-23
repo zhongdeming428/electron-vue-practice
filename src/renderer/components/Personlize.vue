@@ -28,8 +28,8 @@
         推荐歌单
       </span>
       <div class="song-list-collection">
-        <div v-for="song in songList12" :key="song.id" class="song-list">
-          <div :style="{position: 'relative',width: '100%',height: '100%', background: `url('${song.picUrl}') no-repeat`,backgroundSize: 'cover'}">
+        <div v-for="song in songList12" :key="song.id" class="song-list cursor-pointer">
+          <div @click="() => {listClick(song.id)}" :style="{position: 'relative',width: '100%',height: '100%', background: `url('${song.picUrl}') no-repeat`,backgroundSize: 'cover'}">
             <span style="position:absolute;bottom:3px;right:3px;color:white">{{song.playCount}}</span>
           </div>
           {{song.name}}
@@ -69,7 +69,17 @@ export default {
     })
   },
   methods: {
-    ...mapMutations(['SONGLIST_SET'])
+    ...mapMutations(['SONGLIST_SET', 'SONGLIST_SET_ACTIVE']),
+    listClick(id) {
+      const url = `http://localhost:3000/playlist/detail?id=${id}`;
+      this.$http.get(url).then(d => {
+        console.log(d);
+        this.SONGLIST_SET_ACTIVE(d.data.playlist);
+        this.$router.push('/playlist');
+      }, error => {
+        console.log(error);
+      });
+    }
   }
 }
 </script>

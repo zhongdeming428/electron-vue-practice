@@ -64,6 +64,10 @@ export default new Router({
         {
           path: '/personlize/rankList',
           component: require('@/components/personlize/rankList').default
+        },
+        {
+          path: '/playlist',
+          component: require('@/components/playlist').default
         }
       ]
     },
