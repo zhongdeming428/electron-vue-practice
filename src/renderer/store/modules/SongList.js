@@ -13,9 +13,9 @@ const mutations = {
   SONGLIST_SET_ACTIVE(state, list) {
     Object.assign(state.activeSongList, list);
   },
-  SONGLIST_SET_CURRENT(state, list) {
+  SONGLIST_SET_CURRENT(state, { list, index }) {
     state.currentPlayList = list;
-    eventEmitter.emit('startPlay');
+    eventEmitter.emit('startPlay', index);
   }
 };
 

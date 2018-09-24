@@ -15,7 +15,7 @@
     <div class="list-detail">
       <Button @click="playAll"><Icon type="md-play"/>播放全部</Button>
       <ul type="none" class="song-list-detail">
-        <li v-for="(item, index) in activeSongList.tracks" class="cursor-pointer" :style="{backgroundColor: index % 2 === 0 ? '#f7f7f7' : '#fff'}" :key="item.id">
+        <li v-for="(item, index) in activeSongList.tracks" @dblclick="playSong(index)" class="cursor-pointer" :style="{backgroundColor: index % 2 === 0 ? '#f7f7f7' : '#fff'}" :key="item.id">
           <span style="width:20%">{{index + 1}}</span>
           <span style="text-align:left;width:50%">{{item.name}}</span>
           <span style="float:right">
@@ -43,7 +43,16 @@ export default {
   methods: {
     ...mapMutations(['SONGLIST_SET_CURRENT']),
     playAll() {
-      this.SONGLIST_SET_CURRENT(this.activeSongList.tracks);
+      this.SONGLIST_SET_CURRENT({
+        list: this.activeSongList.tracks,
+        index: 0
+      });
+    },
+    playSong(index) {
+      this.SONGLIST_SET_CURRENT({
+        list: this.activeSongList.tracks,
+        index
+      });
     }
   }
 }
