@@ -12,10 +12,10 @@
       <div style="width:80%;display:flex;flex-direction:column;justify-content:space-between">
         <div style="width:100%">
           <div>{{name}}</div>
-          <div style="text-align:right">时长：{{parseInt(time/60)}}：{{time - time%60}}</div>
+          <div style="text-align:right">时长：{{parseInt(time/60)}}:{{time%60}}</div>
         </div>
         <div class="progress-bar">
-          <div ref="innerProgress"></div>
+          <div ref="innerProgress" :style="{width: time/totalTime*100+'%'}"></div>
         </div>
       </div>
     </div>
@@ -32,6 +32,7 @@
 import { Icon } from 'iview';
 import { mapGetters } from 'vuex';
 import { Howl } from 'howler';
+import { setInterval, clearInterval } from 'timers';
 const eventEmitter = require('../util/event');
 
 export default {
@@ -50,7 +51,8 @@ export default {
       coverUrl: 'https://avatars0.githubusercontent.com/u/25274581?s=40&v=4',
       name: '歌曲名',
       time: 0,  // 已播放时长
-      timer: null
+      timer: null,
+      totalTime: 0  // 歌曲总时长
     }
   },
   computed: {
@@ -67,6 +69,9 @@ export default {
         that.sound.stop();
         that.sound = null;
       }
+      clearInterval(that.timer);
+      that.timer = null;
+      that.time = 0;
       that.play();
     })
   },
@@ -85,6 +90,7 @@ export default {
             loop: that.loop,
             onend() {
               that.playNext();
+              clearInterval(that.timer);
               that.timer = null;
               that.time = 0;
             },
@@ -92,6 +98,8 @@ export default {
               that.timer = setInterval(() => {
                 that.time += 1;
               }, 1000);
+              that.totalTime = that.sound.duration();
+              console.log(that.totalTime);
             }
           });
           that.sound = sound;
@@ -108,9 +116,14 @@ export default {
     playClick() {
       if (this.playing) {
         this.sound.pause();
+        clearInterval(this.timer);
+        this.timer = null;
       } else {
         if (this.sound !== null) {
           this.sound.play();
+          this.timer = setInterval(function() {
+            this.time += 1;
+          }, 1000);
         } else {
           this.play();
         }
@@ -123,6 +136,9 @@ export default {
         that.sound.stop();
         that.sound = null;
       }
+      clearInterval(that.timer);
+      that.timer = null;
+      that.time = 0;
       if (this.pointer > 0) {
         this.pointer = this.pointer - 1;
       } else {
@@ -137,6 +153,9 @@ export default {
         that.sound.stop();
         that.sound = null;
       }
+      clearInterval(that.timer);
+      that.timer = null;
+      that.time = 0;
       if (this.pointer < this.currentPlaySongs.length - 1) {
         this.pointer = this.pointer + 1;
       } else {
@@ -182,7 +201,6 @@ export default {
   }
   .progress-bar > div {
     background-color: #515a6e;
-    width: 50%;
     height: 100%;
   }
 </style>

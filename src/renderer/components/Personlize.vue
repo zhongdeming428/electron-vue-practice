@@ -42,6 +42,7 @@
 <script>
 import { Icon } from 'iview';
 import { mapMutations, mapGetters } from 'vuex';
+const eventEmitter = require('../util/event');
 export default {
   name: 'personlize',
   components: {
@@ -55,17 +56,20 @@ export default {
     }
   },
   created() {
-    this.$http.get('http://localhost:3000/personalized').then(d => {
-      let code = d.data.code,
-        data = d.data.result;
-      if (code !== 200) {
-        this.$Message.error = d.statusText;
-      } else {
-        this.SONGLIST_SET(data);
-        console.log(data);
-      }
-    }, err => {
-      console.log(err);
+    let that = this;
+    eventEmitter.on('serverEstablished', function() {
+      that.$http.get('http://localhost:3000/personalized').then(d => {
+        let code = d.data.code,
+          data = d.data.result;
+        if (code !== 200) {
+          that.$Message.error = d.statusText;
+        } else {
+          that.SONGLIST_SET(data);
+          console.log(data);
+        }
+      }, err => {
+        console.log(err);
+      })
     })
   },
   methods: {

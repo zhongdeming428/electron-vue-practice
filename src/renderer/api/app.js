@@ -5,6 +5,7 @@ const fs = require('fs')
 const app = express()
 let cache = apicache.middleware
 var npmview = require('npmview')
+const eventEmitter = require('../util/event')
 npmview('NeteaseCloudMusicApi', function(err, version, moduleInfo) {
   if (err) {
     console.error(err)
@@ -89,7 +90,8 @@ fs.readdirSync(path.resolve(__dirname, 'router'))
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(`server running @ http://localhost:${port}`)
+  console.log(`server running @ http://localhost:${port}`);
+  eventEmitter.emit('serverEstablished');
 });
 
 module.exports = app;
